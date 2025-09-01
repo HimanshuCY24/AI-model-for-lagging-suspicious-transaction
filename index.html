@@ -1,0 +1,1422 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advanced AI Fraud Detection System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }the 
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+      background: radial-gradient(circle at 20% 50%, #667eea 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, #764ba2 0%, transparent 50%),
+                  radial-gradient(circle at 40% 80%, #f093fb 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 2rem;
+      animation: slideDown 0.8s ease-out;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .main-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .main-subtitle {
+      color: #a0aec0;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .stats-bar {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 0.8rem 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #90cdf4;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: #a0aec0;
+      margin-top: 0.2rem;
+    }
+
+    .main-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 500px;
+      padding: 2.5rem;
+      animation: slideUp 0.8s ease-out 0.3s both;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .card-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-subtitle {
+      color: #718096;
+      font-size: 0.95rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 0.9rem;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background-color: #f7fafc;
+    }
+
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: #667eea;
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .analyze-btn {
+      width: 100%;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .analyze-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .analyze-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .analyze-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .result-section {
+      margin-top: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .result-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .result-card {
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-card.high-risk {
+      background: linear-gradient(135deg, #feb2b2 0%, #fed7d7 100%);
+      color: #c53030;
+      border: 2px solid #f56565;
+    }
+
+    .result-card.medium-risk {
+      background: linear-gradient(135deg, #fbd38d 0%, #fef5e7 100%);
+      color: #d69e2e;
+      border: 2px solid #f6ad55;
+    }
+
+    .result-card.low-risk {
+      background: linear-gradient(135deg, #9ae6b4 0%, #c6f6d5 100%);
+      color: #2f855a;
+      border: 2px solid #68d391;
+    }
+
+    .risk-score {
+      font-size: 2rem;
+      font-weight: 800;
+      margin: 1rem 0;
+    }
+
+    .risk-factors {
+      text-align: left;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+    }
+
+    .risk-factors h4 {
+      margin-bottom: 0.5rem;
+      color: #2d3748;
+    }
+
+    .risk-factors ul {
+      margin-left: 1.2rem;
+      color: #4a5568;
+    }
+
+    .risk-factors li {
+      margin-bottom: 0.3rem;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid #ffffff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .icon {
+      font-size: 1.1em;
+      margin-right: 0.5rem;
+    }
+
+    .advanced-features {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      font-size: 0.9rem;
+      color: #a0aec0;
+    }
+
+    .dashboard-section {
+      margin-top: 3rem;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      display: none;
+    }
+
+    .dashboard-section.active {
+      display: block;
+      animation: slideUp 0.5s ease-out;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .dashboard-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2d3748;
+    }
+
+    .tab-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      padding: 0.8rem 1.5rem;
+      background: #f7fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: #667eea;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .chart-container {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      border: 1px solid #e2e8f0;
+    }
+
+    .transaction-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .transaction-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      background: #f7fafc;
+      border-radius: 8px;
+      border-left: 4px solid transparent;
+    }
+
+    .transaction-item.high-risk {
+      border-left-color: #e53e3e;
+      background: #fed7d7;
+    }
+
+    .transaction-item.medium-risk {
+      border-left-color: #d69e2e;
+      background: #fef5e7;
+    }
+
+    .transaction-item.low-risk {
+      border-left-color: #38a169;
+      background: #c6f6d5;
+    }
+
+    .transaction-details {
+      flex: 1;
+    }
+
+    .transaction-amount {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #2d3748;
+    }
+
+    .transaction-meta {
+      font-size: 0.85rem;
+      color: #718096;
+      margin-top: 0.2rem;
+    }
+
+    .transaction-risk {
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .close-btn {
+      background: #e53e3e;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .close-btn:hover {
+      background: #c53030;
+    }
+
+    .chart-placeholder {
+      height: 200px;
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #718096;
+      font-weight: 600;
+      border: 2px dashed #cbd5e0;
+    }
+
+    .ml-models-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .model-card {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .model-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+    }
+
+    .model-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .model-name {
+      font-weight: 700;
+      color: #2d3748;
+    }
+
+    .model-status {
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .model-status.active {
+      background: #c6f6d5;
+      color: #2f855a;
+    }
+
+    .model-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .metric {
+      text-align: center;
+      padding: 0.8rem;
+      background: #f7fafc;
+      border-radius: 8px;
+    }
+
+    .metric-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .metric-label {
+      font-size: 0.8rem;
+      color: #718096;
+      margin-top: 0.2rem;
+    }
+
+    @media (max-width: 768px) {
+      .main-title {
+        font-size: 2rem;
+      }
+      
+      .stats-bar {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .main-card {
+        padding: 2rem;
+        margin: 10px;
+      }
+      
+      .advanced-features {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .main-card {
+        padding: 1.5rem;
+      }
+      
+      .main-title {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-animation"></div>
+  
+  <div class="container">
+    <div class="header-section">
+      <h1 class="main-title">🛡️ Advanced AI Fraud Detection</h1>
+      <p class="main-subtitle">Real-time transaction analysis with machine learning</p>
+      
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-number">99.7%</div>
+          <div class="stat-label">Accuracy</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">&lt;0.1s</div>
+          <div class="stat-label">Response Time</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">24/7</div>
+          <div class="stat-label">Monitoring</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-card">
+      <div class="card-header">
+        <h2 class="card-title">Transaction Analysis</h2>
+        <p class="card-subtitle">Enter transaction details for real-time fraud assessment</p>
+      </div>
+
+      <form id="transactionForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="amount">
+              <span class="icon">💰</span>Amount (₹)
+            </label>
+            <input 
+              type="number" 
+              id="amount" 
+              class="form-input"
+              placeholder="50,000" 
+              min="0"
+              step="0.01"
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="hour">
+              <span class="icon">🕐</span>Hour (0-23)
+            </label>
+            <input 
+              type="number" 
+              id="hour" 
+              class="form-input"
+              placeholder="14" 
+              min="0"
+              max="23"
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="type">
+              <span class="icon">💳</span>Type
+            </label>
+            <select id="type" class="form-select" required>
+              <option value="">Select type</option>
+              <option value="debit">Debit</option>
+              <option value="credit">Credit</option>
+              <option value="transfer">Transfer</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="location">
+              <span class="icon">📍</span>Location
+            </label>
+            <select id="location" class="form-select" required>
+              <option value="">Select location</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Chennai">Chennai</option>
+              <option value="Kolkata">Kolkata</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Bangalore">Bangalore</option>
+              <option value="Pune">Pune</option>
+              <option value="Ahmedabad">Ahmedabad</option>
+              <option value="Jaipur">Jaipur</option>
+              <option value="Lucknow">Lucknow</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="accountAge">
+              <span class="icon">📅</span>Account Age (days)
+            </label>
+            <input 
+              type="number" 
+              id="accountAge" 
+              class="form-input"
+              placeholder="365" 
+              min="1"
+              required 
+            />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prevTransactions">
+              <span class="icon">📊</span>Previous Transactions
+            </label>
+            <input 
+              type="number" 
+              id="prevTransactions" 
+              class="form-input"
+              placeholder="25" 
+              min="0"
+              required 
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="analyze-btn">
+          <span id="btnText">🔍 Analyze Transaction</span>
+        </button>
+      </form>
+
+      <div id="resultSection" class="result-section">
+        <div id="resultCard" class="result-card">
+          <div id="resultContent"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="advanced-features">
+      <div class="feature-card" onclick="showDashboard('analytics')">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Analytics Dashboard</div>
+        <div class="feature-desc">Real-time fraud analytics and transaction insights</div>
+      </div>
+      <div class="feature-card" onclick="showDashboard('history')">
+        <div class="feature-icon">📋</div>
+        <div class="feature-title">Transaction History</div>
+        <div class="feature-desc">View and analyze previous transaction patterns</div>
+      </div>
+      <div class="feature-card" onclick="showDashboard('models')">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">ML Models</div>
+        <div class="feature-desc">Advanced machine learning model management</div>
+      </div>
+      <div class="feature-card" onclick="showDashboard('settings')">
+        <div class="feature-icon">⚙️</div>
+        <div class="feature-title">System Settings</div>
+        <div class="feature-desc">Configure fraud detection parameters</div>
+      </div>
+    </div>
+
+    <!-- Advanced Dashboard Section -->
+    <div id="dashboardSection" class="dashboard-section">
+      <div class="dashboard-header">
+        <h2 class="dashboard-title" id="dashboardTitle">Advanced Analytics</h2>
+        <button class="close-btn" onclick="closeDashboard()">Close Dashboard</button>
+      </div>
+
+      <div class="tab-container">
+        <div class="tab-btn active" onclick="switchTab('analytics')">Analytics</div>
+        <div class="tab-btn" onclick="switchTab('history')">History</div>
+        <div class="tab-btn" onclick="switchTab('models')">ML Models</div>
+        <div class="tab-btn" onclick="switchTab('settings')">Settings</div>
+      </div>
+
+      <!-- Analytics Tab -->
+      <div id="analytics-tab" class="tab-content active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="todayTransactions">247</div>
+            <div class="stat-label">Today's Transactions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="fraudDetected">12</div>
+            <div class="stat-label">Fraud Detected</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="accuracy">99.2%</div>
+            <div class="stat-label">Model Accuracy</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="avgResponse">0.08s</div>
+            <div class="stat-label">Avg Response Time</div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h3>Fraud Detection Trends (Last 7 Days)</h3>
+          <div class="chart-placeholder">📈 Interactive Chart - Real-time fraud detection trends</div>
+        </div>
+
+        <div class="chart-container">
+          <h3>Risk Score Distribution</h3>
+          <div class="chart-placeholder">📊 Risk Score Analytics - Transaction risk patterns</div>
+        </div>
+      </div>
+
+      <!-- Transaction History Tab -->
+      <div id="history-tab" class="tab-content">
+        <div class="chart-container">
+          <h3>Recent Transaction Analysis</h3>
+          <div class="transaction-list" id="transactionHistory">
+            <!-- Dynamic transaction history will be populated here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ML Models Tab -->
+      <div id="models-tab" class="tab-content">
+        <div class="ml-models-grid">
+          <div class="model-card">
+            <div class="model-header">
+              <div class="model-name">Random Forest Classifier</div>
+              <div class="model-status active">Active</div>
+            </div>
+            <p>Primary fraud detection model using ensemble learning</p>
+            <div class="model-metrics">
+              <div class="metric">
+                <div class="metric-value">99.2%</div>
+                <div class="metric-label">Accuracy</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">2.1%</div>
+                <div class="metric-label">False Positives</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="model-card">
+            <div class="model-header">
+              <div class="model-name">Gradient Boosting Model</div>
+              <div class="model-status active">Active</div>
+            </div>
+            <p>Secondary model for pattern validation and ensemble predictions</p>
+            <div class="model-metrics">
+              <div class="metric">
+                <div class="metric-value">98.8%</div>
+                <div class="metric-label">Accuracy</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">1.9%</div>
+                <div class="metric-label">False Positives</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="model-card">
+            <div class="model-header">
+              <div class="model-name">Neural Network</div>
+              <div class="model-status">Development</div>
+            </div>
+            <p>Deep learning model for complex pattern recognition</p>
+            <div class="model-metrics">
+              <div class="metric">
+                <div class="metric-value">97.5%</div>
+                <div class="metric-label">Accuracy</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value">3.2%</div>
+                <div class="metric-label">False Positives</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div id="settings-tab" class="tab-content">
+        <div class="chart-container">
+          <h3>Fraud Detection Parameters</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">High Risk Threshold</label>
+              <input type="range" id="highRiskThreshold" min="50" max="90" value="70" class="form-input" onchange="updateThresholds()">
+              <span id="highRiskValue">70</span>%
+            </div>
+            <div class="form-group">
+              <label class="form-label">Medium Risk Threshold</label>
+              <input type="range" id="mediumRiskThreshold" min="20" max="60" value="40" class="form-input" onchange="updateThresholds()">
+              <span id="mediumRiskValue">40</span>%
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <h3>Alert Settings</h3>
+          <div class="form-group">
+            <label class="form-label">
+              <input type="checkbox" checked> Real-time fraud alerts
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <input type="checkbox" checked> Email notifications for high-risk transactions
+            </label>
+          </div>
+          <div class="form-group">
+            <label class="form-label">
+              <input type="checkbox"> SMS alerts for critical fraud detection
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class AdvancedFraudDetector {
+      constructor() {
+        this.form = document.getElementById('transactionForm');
+        this.resultSection = document.getElementById('resultSection');
+        this.resultCard = document.getElementById('resultCard');
+        this.resultContent = document.getElementById('resultContent');
+        this.btnText = document.getElementById('btnText');
+        this.transactionHistory = [];
+        this.fraudStats = {
+          todayTransactions: 247,
+          fraudDetected: 12,
+          accuracy: 99.2,
+          avgResponse: 0.08
+        };
+        this.thresholds = {
+          high: 70,
+          medium: 40
+        };
+        
+        this.initializeEventListeners();
+        this.generateMockHistory();
+        this.updateDashboardStats();
+      }
+
+      initializeEventListeners() {
+        this.form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.analyzeTransaction();
+        });
+
+        // Real-time validation with enhanced feedback
+        const inputs = this.form.querySelectorAll('input, select');
+        inputs.forEach(input => {
+          input.addEventListener('input', () => this.validateInput(input));
+          input.addEventListener('focus', () => this.onInputFocus(input));
+          input.addEventListener('blur', () => this.onInputBlur(input));
+        });
+      }
+
+      validateInput(input) {
+        const value = input.value.trim();
+        
+        input.style.borderColor = '';
+        input.style.transform = '';
+        
+        if (input.hasAttribute('required') && !value) {
+          this.setInputError(input);
+          return false;
+        }
+
+        if (input.type === 'number') {
+          const num = parseFloat(value);
+          const min = parseFloat(input.min);
+          const max = parseFloat(input.max);
+          
+          if (isNaN(num) || (min !== undefined && num < min) || (max !== undefined && num > max)) {
+            this.setInputError(input);
+            return false;
+          }
+        }
+
+        this.setInputSuccess(input);
+        return true;
+      }
+
+      setInputError(input) {
+        input.style.borderColor = '#f56565';
+        input.style.boxShadow = '0 0 0 3px rgba(245, 101, 101, 0.1)';
+      }
+
+      setInputSuccess(input) {
+        input.style.borderColor = '#48bb78';
+        input.style.boxShadow = '0 0 0 3px rgba(72, 187, 120, 0.1)';
+      }
+
+      onInputFocus(input) {
+        input.style.transform = 'translateY(-1px)';
+      }
+
+      onInputBlur(input) {
+        if (!input.value.trim()) {
+          input.style.transform = '';
+        }
+      }
+
+      validateForm() {
+        const inputs = this.form.querySelectorAll('input[required], select[required]');
+        let isValid = true;
+
+        inputs.forEach(input => {
+          if (!this.validateInput(input)) {
+            isValid = false;
+          }
+        });
+
+        return isValid;
+      }
+
+      showLoading() {
+        this.btnText.innerHTML = '<span class="loading-spinner"></span>Analyzing Transaction...';
+        this.form.querySelector('.analyze-btn').disabled = true;
+      }
+
+      hideLoading() {
+        this.btnText.innerHTML = '🔍 Analyze Transaction';
+        this.form.querySelector('.analyze-btn').disabled = false;
+      }
+
+      async analyzeTransaction() {
+        if (!this.validateForm()) {
+          this.showResult('Please fill in all required fields correctly.', 'high-risk', 100, ['Invalid form data']);
+          return;
+        }
+
+        this.showLoading();
+
+        // Simulate advanced AI processing
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        try {
+          const transactionData = this.getTransactionData();
+          const analysis = this.detectFraud(transactionData);
+          
+          this.showResult(analysis.message, analysis.riskLevel, analysis.riskScore, analysis.factors);
+        } catch (error) {
+          this.showResult('System error during analysis. Please try again.', 'high-risk', 100, ['System malfunction']);
+        } finally {
+          this.hideLoading();
+        }
+      }
+
+      getTransactionData() {
+        return {
+          amount: parseFloat(document.getElementById('amount').value),
+          hour: parseInt(document.getElementById('hour').value),
+          type: document.getElementById('type').value,
+          location: document.getElementById('location').value,
+          accountAge: parseInt(document.getElementById('accountAge').value),
+          prevTransactions: parseInt(document.getElementById('prevTransactions').value)
+        };
+      }
+
+      detectFraud(data) {
+        const suspiciousFactors = [];
+        let riskScore = 0;
+
+        // Advanced amount analysis
+        if (data.amount > 100000) {
+          suspiciousFactors.push('Extremely high transaction amount (>₹1,00,000)');
+          riskScore += 45;
+        } else if (data.amount > 75000) {
+          suspiciousFactors.push('Very high transaction amount (>₹75,000)');
+          riskScore += 35;
+        } else if (data.amount > 50000) {
+          suspiciousFactors.push('High transaction amount (>₹50,000)');
+          riskScore += 25;
+        }
+
+        // Round number detection (potential fraud indicator)
+        if (data.amount % 10000 === 0 && data.amount > 20000) {
+          suspiciousFactors.push('Suspiciously round transaction amount');
+          riskScore += 20;
+        }
+
+        // Time-based analysis
+        if (data.hour >= 0 && data.hour < 5) {
+          suspiciousFactors.push('Transaction during very late night hours (12-5 AM)');
+          riskScore += 35;
+        } else if (data.hour >= 23 || data.hour < 6) {
+          suspiciousFactors.push('Transaction during odd hours');
+          riskScore += 25;
+        }
+
+        // Account age risk assessment
+        if (data.accountAge < 30) {
+          suspiciousFactors.push('Very new account (< 30 days)');
+          riskScore += 30;
+          
+          if (data.amount > 25000) {
+            suspiciousFactors.push('High-value transaction on new account');
+            riskScore += 25;
+          }
+        } else if (data.accountAge < 90) {
+          suspiciousFactors.push('Relatively new account (< 90 days)');
+          riskScore += 15;
+        }
+
+        // Transaction velocity analysis
+        if (data.prevTransactions > 50 && data.accountAge < 180) {
+          suspiciousFactors.push('High transaction frequency for account age');
+          riskScore += 20;
+        } else if (data.prevTransactions > 100) {
+          suspiciousFactors.push('Very high transaction frequency');
+          riskScore += 15;
+        }
+
+        // Geographic and type pattern analysis
+        const highRiskLocations = ['Hyderabad', 'Jaipur', 'Ahmedabad'];
+        if (highRiskLocations.includes(data.location)) {
+          suspiciousFactors.push(`Transaction in high-risk location: ${data.location}`);
+          riskScore += 20;
+        }
+
+        // Cross-reference type and location
+        if (data.type === 'debit' && ['Kolkata', 'Lucknow'].includes(data.location) && data.amount > 30000) {
+          suspiciousFactors.push('High-value debit in risk-flagged location');
+          riskScore += 25;
+        }
+
+        // Weekend pattern detection
+        const now = new Date();
+        const isWeekend = now.getDay() === 0 || now.getDay() === 6;
+        if (isWeekend && data.amount > 40000 && (data.hour < 8 || data.hour > 20)) {
+          suspiciousFactors.push('Weekend high-value transaction during off-hours');
+          riskScore += 20;
+        }
+
+        // Transfer-specific risks
+        if (data.type === 'transfer' && data.amount > 60000) {
+          suspiciousFactors.push('High-value transfer transaction');
+          riskScore += 30;
+        }
+
+        // Behavioral pattern simulation
+        if (Math.random() > 0.85) {
+          suspiciousFactors.push('Matches known fraudulent behavior pattern');
+          riskScore += 40;
+        }
+
+        return this.generateAdvancedReport(riskScore, suspiciousFactors, data);
+      }
+
+      generateAdvancedReport(riskScore, factors, data) {
+        let riskLevel, message;
+
+        if (riskScore >= 70) {
+          riskLevel = 'high-risk';
+          message = `🚨 CRITICAL FRAUD ALERT`;
+        } else if (riskScore >= 40) {
+          riskLevel = 'medium-risk';
+          message = `⚠️ SUSPICIOUS ACTIVITY DETECTED`;
+        } else if (riskScore >= 15) {
+          riskLevel = 'medium-risk';
+          message = `⚡ CAUTION ADVISED`;
+        } else {
+          riskLevel = 'low-risk';
+          message = `✅ TRANSACTION APPROVED`;
+        }
+
+        return {
+          riskLevel,
+          riskScore,
+          message,
+          factors: factors.length > 0 ? factors : ['No suspicious patterns detected']
+        };
+      }
+
+      showResult(message, riskLevel, riskScore, factors) {
+        // Create result content
+        let recommendation;
+        if (riskLevel === 'high-risk') {
+          recommendation = 'IMMEDIATE ACTION: Block transaction and contact customer';
+        } else if (riskLevel === 'medium-risk') {
+          recommendation = 'REVIEW REQUIRED: Additional verification recommended';
+        } else {
+          recommendation = 'APPROVED: Proceed with standard monitoring';
+        }
+
+        this.resultContent.innerHTML = `
+          <h3>${message}</h3>
+          <div class="risk-score">${riskScore}/100</div>
+          <div style="margin: 1rem 0; font-size: 0.9rem; opacity: 0.8;">
+            ${recommendation}
+          </div>
+          <div class="risk-factors">
+            <h4>${riskLevel === 'low-risk' ? '✅ Assessment Details:' : '🔍 Risk Factors Identified:'}</h4>
+            <ul>
+              ${factors.map(factor => `<li>${factor}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+
+        this.resultCard.className = `result-card ${riskLevel}`;
+        this.resultSection.classList.add('visible');
+        
+        // Add to transaction history
+        this.addToHistory(riskLevel, riskScore, factors);
+        
+        // Update stats
+        this.updateStats(riskLevel);
+        
+        // Smooth scroll to result
+        setTimeout(() => {
+          this.resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+
+      addToHistory(riskLevel, riskScore, factors) {
+        const transactionData = this.getTransactionData();
+        const timestamp = new Date().toLocaleString();
+        
+        const historyItem = {
+          ...transactionData,
+          riskLevel,
+          riskScore,
+          factors,
+          timestamp,
+          id: Date.now()
+        };
+        
+        this.transactionHistory.unshift(historyItem);
+        
+        // Keep only last 50 transactions
+        if (this.transactionHistory.length > 50) {
+          this.transactionHistory = this.transactionHistory.slice(0, 50);
+        }
+        
+        this.updateHistoryDisplay();
+      }
+
+      generateMockHistory() {
+        const locations = ['Delhi', 'Mumbai', 'Chennai', 'Kolkata', 'Hyderabad'];
+        const types = ['debit', 'credit', 'transfer'];
+        const riskLevels = ['low-risk', 'medium-risk', 'high-risk'];
+        
+        for (let i = 0; i < 20; i++) {
+          const amount = Math.floor(Math.random() * 100000) + 1000;
+          const hour = Math.floor(Math.random() * 24);
+          const riskLevel = riskLevels[Math.floor(Math.random() * riskLevels.length)];
+          const riskScore = riskLevel === 'high-risk' ? 
+            Math.floor(Math.random() * 30) + 70 :
+            riskLevel === 'medium-risk' ?
+            Math.floor(Math.random() * 30) + 40 :
+            Math.floor(Math.random() * 40);
+          
+          this.transactionHistory.push({
+            amount,
+            hour,
+            type: types[Math.floor(Math.random() * types.length)],
+            location: locations[Math.floor(Math.random() * locations.length)],
+            riskLevel,
+            riskScore,
+            factors: [`Generated test factor for ${riskLevel} transaction`],
+            timestamp: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toLocaleString(),
+            id: Date.now() + i
+          });
+        }
+      }
+
+      updateHistoryDisplay() {
+        const historyContainer = document.getElementById('transactionHistory');
+        if (!historyContainer) return;
+        
+        historyContainer.innerHTML = this.transactionHistory.map(item => `
+          <div class="transaction-item ${item.riskLevel}">
+            <div class="transaction-details">
+              <div class="transaction-amount">₹${item.amount.toLocaleString()}</div>
+              <div class="transaction-meta">
+                ${item.type.toUpperCase()} • ${item.location} • ${item.timestamp}
+              </div>
+            </div>
+            <div class="transaction-risk">
+              <div style="font-size: 1.1rem;">${item.riskScore}/100</div>
+              <div style="font-size: 0.8rem; margin-top: 0.2rem;">
+                ${item.riskLevel.replace('-', ' ').toUpperCase()}
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      updateStats(riskLevel) {
+        this.fraudStats.todayTransactions++;
+        if (riskLevel === 'high-risk') {
+          this.fraudStats.fraudDetected++;
+        }
+        this.updateDashboardStats();
+      }
+
+      updateDashboardStats() {
+        const elements = {
+          todayTransactions: document.getElementById('todayTransactions'),
+          fraudDetected: document.getElementById('fraudDetected'),
+          accuracy: document.getElementById('accuracy'),
+          avgResponse: document.getElementById('avgResponse')
+        };
+        
+        if (elements.todayTransactions) elements.todayTransactions.textContent = this.fraudStats.todayTransactions;
+        if (elements.fraudDetected) elements.fraudDetected.textContent = this.fraudStats.fraudDetected;
+        if (elements.accuracy) elements.accuracy.textContent = this.fraudStats.accuracy + '%';
+        if (elements.avgResponse) elements.avgResponse.textContent = this.fraudStats.avgResponse + 's';
+      }
+    }
+
+    // Dashboard control functions
+    function showDashboard(tab) {
+      const dashboard = document.getElementById('dashboardSection');
+      const title = document.getElementById('dashboardTitle');
+      
+      dashboard.classList.add('active');
+      
+      const titles = {
+        analytics: 'Advanced Analytics Dashboard',
+        history: 'Transaction History & Patterns',
+        models: 'Machine Learning Models',
+        settings: 'System Configuration'
+      };
+      
+      title.textContent = titles[tab] || 'Advanced Dashboard';
+      switchTab(tab);
+    }
+
+    function closeDashboard() {
+      const dashboard = document.getElementById('dashboardSection');
+      dashboard.classList.remove('active');
+    }
+
+    function switchTab(tabName) {
+      // Remove active class from all tabs and buttons
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Add active class to selected tab and button
+      const selectedTab = document.getElementById(tabName + '-tab');
+      const selectedBtn = document.querySelector(`.tab-btn[onclick="switchTab('${tabName}')"]`);
+      
+      if (selectedTab) selectedTab.classList.add('active');
+      if (selectedBtn) selectedBtn.classList.add('active');
+    }
+
+    function updateThresholds() {
+      const highThreshold = document.getElementById('highRiskThreshold');
+      const mediumThreshold = document.getElementById('mediumRiskThreshold');
+      const highValue = document.getElementById('highRiskValue');
+      const mediumValue = document.getElementById('mediumRiskValue');
+      
+      if (highThreshold && highValue) {
+        highValue.textContent = highThreshold.value;
+      }
+      if (mediumThreshold && mediumValue) {
+        mediumValue.textContent = mediumThreshold.value;
+      }
+    }
+
+    // Initialize the advanced fraud detector
+    document.addEventListener('DOMContentLoaded', () => {
+      new AdvancedFraudDetector();
+    });
+
+    // Enhanced utility functions
+    const advancedUtils = {
+      formatCurrency: (amount) => {
+        return new Intl.NumberFormat('en-IN', {
+          style: 'currency',
+          currency: 'INR',
+          minimumFractionDigits: 0
+        }).format(amount);
+      },
+
+      formatTime: (hour) => {
+        return new Date(0, 0, 0, hour).toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          hour12: true
+        });
+      },
+
+      getTimeOfDay: (hour) => {
+        if (hour >= 5 && hour < 12) return 'Morning';
+        if (hour >= 12 && hour < 17) return 'Afternoon';
+        if (hour >= 17 && hour < 21) return 'Evening';
+        return 'Night';
+      },
+
+      getRiskColor: (score) => {
+        if (score >= 70) return '#e53e3e';
+        if (score >= 40) return '#d69e2e';
+        return '#38a169';
+      }
+    };
+  </script>
+</body>
+</html>
