@@ -66,7 +66,7 @@ Web server (optional, for local development)
 Quick Start
 Clone the repository
 bash
-git clone https://github.com/[your-username]/ai-fraud-detection.git
+
 cd ai-fraud-detection
 Launch the application
 bash
